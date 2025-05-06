@@ -22,3 +22,5 @@ core
 cmake-build-*
 examples/CalculatorService/calculator
 examples/CalculatorService/wsdl
+/examples/OpenLDBWS/openldbws/
+/examples/OpenLDBWS/wsdlpart/
