@@ -159,6 +159,8 @@ bool QWSDLParser::endDocument()
 		if((*type)->getTypeMode() == Type::TypeComplex)
 		{
 			ComplexTypeSharedPtr pComplexType = qSharedPointerCast<ComplexType>(*type);
+		    qWarning("[QWSDLParser] SJH --- Complex Type Name is [%s]", qPrintable(pComplexType->getLocalName()));
+
 			if(pComplexType->getExtensionType()) {
 				if(pComplexType->getExtensionType()->getTypeMode() == Type::TypeUnknown) {
 					pType = getTypeByName(pComplexType->getExtensionType()->getLocalName(), pComplexType->getExtensionType()->getNamespace());
