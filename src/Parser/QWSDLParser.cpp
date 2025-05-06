@@ -1330,7 +1330,7 @@ bool QWSDLParser::readInclude(QXmlStreamReader& xmlReader)
 	QString szNamespaceUri;
 	if(xmlAttrs.hasAttribute(ATTR_SCHEMA_LOCATION))
 	{
-		szLocation = xmlAttrs.value(ATTR_SCHEMA_LOCATION).toString();
+		szLocation = "./wsdl/" + xmlAttrs.value(ATTR_SCHEMA_LOCATION).toString();
 	}
 	if(xmlAttrs.hasAttribute(ATTR_NAMESPACE))
 	{
