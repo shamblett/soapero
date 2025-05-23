@@ -159,7 +159,6 @@ bool QWSDLParser::endDocument()
 		if((*type)->getTypeMode() == Type::TypeComplex)
 		{
 			ComplexTypeSharedPtr pComplexType = qSharedPointerCast<ComplexType>(*type);
-		    qWarning("[QWSDLParser] SJH --- Complex Type Name is [%s]", qPrintable(pComplexType->getLocalName()));
 
 			if(pComplexType->getExtensionType()) {
 				if(pComplexType->getExtensionType()->getTypeMode() == Type::TypeUnknown) {
@@ -1891,7 +1890,7 @@ bool QWSDLParser::loadFromHttp(const QString& szURL, const QString& szNamespaceU
 	}
 
 	logParser("loading from http: " + szURL);
-	qDebug("[QWSDLParser] Loading from http: %s", qPrintable(szURL));
+	printf("[QWSDLParser] Loading from http: %s", qPrintable(szURL));
 
 	// Download the file
 	QNetworkAccessManager manager;
@@ -1954,7 +1953,7 @@ bool QWSDLParser::loadFromHttp(const QString& szURL, const QString& szNamespaceU
 				qPrintable(xmlReader.errorString()));
 	}
 
-	qDebug("[QWSDLParser] End of loading from http: %s", qPrintable(szURL));
+	printf("[QWSDLParser] End of loading from http: %s", qPrintable(szURL));
 
 	return bRes;
 }
@@ -1968,7 +1967,7 @@ bool QWSDLParser::loadFromFile(const QString& szFileName, const QString& szNames
 		return true;
 	}
 
-	qDebug("[QWSDLParser] Loading from file: %s", qPrintable(szFileName));
+	printf("[QWSDLParser] Loading from file: %s", qPrintable(szFileName));
 
 	QFile file(szFileName);
 	bRes = file.open(QFile::ReadOnly);
@@ -2021,7 +2020,7 @@ bool QWSDLParser::loadFromFile(const QString& szFileName, const QString& szNames
 				qPrintable(file.errorString()));
 	}
 
-	qDebug("[QWSDLParser] End of loading from file: %s", qPrintable(szFileName));
+	printf("[QWSDLParser] End of loading from file: %s", qPrintable(szFileName));
 
 	return bRes;
 }
@@ -2081,7 +2080,7 @@ void QWSDLParser::updateTargetNamespacePrefix(const QString& szTargetNamespaceUR
 		{
 			m_szCurrentTargetNamespacePrefix = szPrefix;
 			m_szCurrentTargetNamespaceUri = szNamespaceURI;
-			qDebug("[QWSDLParser] Target namespace prefix found in definitions: %s", qPrintable(m_szCurrentTargetNamespacePrefix));
+			printf("[QWSDLParser] Target namespace prefix found in definitions: %s", qPrintable(m_szCurrentTargetNamespacePrefix));
 			break;
 		}
 		iter++;
@@ -2095,7 +2094,7 @@ void QWSDLParser::logParser(const QString& szMsg)
 	{
 		szIdent += " ";
 	}
-	//qDebug("[QWSDLParser] %s%s", qPrintable(szIdent), qPrintable(szMsg));
+	printf("[QWSDLParser] %s%s\n", qPrintable(szIdent), qPrintable(szMsg));
 }
 
 void QWSDLParser::incrLogIndent()
