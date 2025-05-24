@@ -711,6 +711,8 @@ bool QWSDLParser::readComplexType(QXmlStreamReader& xmlReader, Section::Name iPa
 
 	ComplexTypeSharedPtr pComplexType;
 
+	logParser("SJH - readComplexType entered ");
+
 	if(iParentSection == Section::Element)
 	{
 		pComplexType = ComplexType::create();
@@ -719,6 +721,7 @@ bool QWSDLParser::readComplexType(QXmlStreamReader& xmlReader, Section::Name iPa
 			pComplexType->setNamespace(m_szCurrentTargetNamespacePrefix);
 			pComplexType->setNamespaceUri(m_szCurrentTargetNamespaceUri);
 			m_pCurrentElement->setType(pComplexType);
+			logParser("SJH - complex type created from element : " + pComplexType->getLocalName());
 		}
 	}else{
 		if(xmlAttrs.hasAttribute(ATTR_NAME))
@@ -733,19 +736,23 @@ bool QWSDLParser::readComplexType(QXmlStreamReader& xmlReader, Section::Name iPa
 					pComplexType->setLocalName(szName);
 					pComplexType->setNamespace(m_szCurrentTargetNamespacePrefix);
 					pComplexType->setNamespaceUri(m_szCurrentTargetNamespaceUri);
+					logParser("SJH - complex type created from attribute - unknown type found: " + pComplexType->getLocalName());
 				}else{
 					pComplexType = qSharedPointerCast<ComplexType>(pFoundType);;
+					logParser("SJH - complex type created from attribute - complex type found: " + pComplexType->getLocalName());
 				}
 			}else{
 				pComplexType = ComplexType::create();
 				pComplexType->setLocalName(szName);
 				pComplexType->setNamespace(m_szCurrentTargetNamespacePrefix);
 				pComplexType->setNamespaceUri(m_szCurrentTargetNamespaceUri);
+				logParser("SJH - complex type created from attribute - type not found: " + pComplexType->getLocalName());
 			}
 
 			if((szName == "Fault") && m_bWaitForSoapEnvelopeFault){
 				pComplexType->setIsSoapEnvelopeFault(true);
 			}
+			logParser("SJH - complex type created from attribute - namespace : " + pComplexType->getNamespace());
 		}
 	}
 	if(pComplexType){
@@ -757,16 +764,20 @@ bool QWSDLParser::readComplexType(QXmlStreamReader& xmlReader, Section::Name iPa
 	while (bRes && xmlReader.readNextStartElement())
 	{
 		QString szTagName = xmlReader.name().toString();
-		logParser("processing: " + szTagName);
+		logParser("SJH - processing sub elements: " + szTagName);
 
 		if (xmlReader.name().toString() == TAG_COMPLEX_CONTENT) {
 			bRes = readComplexContent(xmlReader, Section::ComplexType);
+			logParser("SJH - sub element is complex: " + szTagName);
 		}else if (xmlReader.name().toString() == TAG_SIMPLE_CONTENT) {
 			bRes = readSimpleContent(xmlReader, Section::ComplexType);
+			logParser("SJH - sub element is simple: " + szTagName);
 		}else if(isParticleAndAttrs(szTagName)){
 			bRes = readParticleAndAttrs(xmlReader, szTagName, Section::ComplexType);
+			logParser("SJH - sub element is attr: " + szTagName);
 		}else{
 			xmlReader.skipCurrentElement();
+			logParser("SJH - sub element is skipped: " + szTagName);
 		}
 	}
 	decrLogIndent();
@@ -775,12 +786,12 @@ bool QWSDLParser::readComplexType(QXmlStreamReader& xmlReader, Section::Name iPa
 	if(pComplexType){
 		if((iParentSection == Section::Element) && m_pCurrentRequestResponseElement) {
 			if(m_pCurrentElement && (m_pCurrentElement->getName() != m_pCurrentRequestResponseElement->getLocalName())){
-				m_pListTypes->add(qSharedPointerCast<Type>(pComplexType));
+				m_pListTypes->add(pComplexType);
 			}
 
 			m_pCurrentRequestResponseElement->setType(pComplexType);
 		}else{
-			m_pListTypes->add(qSharedPointerCast<Type>(pComplexType));
+			m_pListTypes->add(pComplexType);
 		}
 
 		if(m_pCurrentAttribute){
@@ -789,6 +800,8 @@ bool QWSDLParser::readComplexType(QXmlStreamReader& xmlReader, Section::Name iPa
 
 		popCurrentType();
 	}
+
+	logParser("SJH - readComplexType exited ");
 
 	return bRes;
 }
@@ -2027,7 +2040,7 @@ bool QWSDLParser::loadFromFile(const QString& szFileName, const QString& szNames
 
 void QWSDLParser::pushCurrentType(const TypeSharedPtr& pCurrentType)
 {
-	logParser(" add type: " + pCurrentType->getLocalName());
+	logParser(" add type: " + pCurrentType->getLocalName() + " at level : " + QString::number(m_stackCurrentTypes.count()));
 	m_stackCurrentTypes.push(pCurrentType);
 }
 
