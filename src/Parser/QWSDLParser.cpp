@@ -747,6 +747,10 @@ bool QWSDLParser::readComplexType(QXmlStreamReader& xmlReader, Section::Name iPa
 				pComplexType->setNamespace(m_szCurrentTargetNamespacePrefix);
 				pComplexType->setNamespaceUri(m_szCurrentTargetNamespaceUri);
 				logParser("SJH - complex type created from attribute - type not found: " + pComplexType->getLocalName());
+				if ( pComplexType->getLocalName() == "ServiceItem" && pComplexType->getNamespace() == "ldbt2021")
+				{
+					logParser("SJH - ServiceItem Trap ");
+				}
 			}
 
 			if((szName == "Fault") && m_bWaitForSoapEnvelopeFault){
@@ -765,9 +769,10 @@ bool QWSDLParser::readComplexType(QXmlStreamReader& xmlReader, Section::Name iPa
 	{
 		QString szTagName = xmlReader.name().toString();
 		logParser("SJH - processing sub elements: " + szTagName);
-
+        ComplexTypeSharedPtr pComplexTypeClone = pComplexType->clone();
 		if (xmlReader.name().toString() == TAG_COMPLEX_CONTENT) {
 			bRes = readComplexContent(xmlReader, Section::ComplexType);
+			pComplexType = pComplexTypeClone;
 			logParser("SJH - sub element is complex: " + szTagName);
 		}else if (xmlReader.name().toString() == TAG_SIMPLE_CONTENT) {
 			bRes = readSimpleContent(xmlReader, Section::ComplexType);
@@ -802,6 +807,10 @@ bool QWSDLParser::readComplexType(QXmlStreamReader& xmlReader, Section::Name iPa
 	}
 
 	logParser("SJH - readComplexType exited ");
+	if ( pComplexType->getLocalName() == "ServiceItem")
+	{
+		logParser("SJH - ServiceItem Trap ");
+	}
 
 	return bRes;
 }
@@ -2047,7 +2056,10 @@ void QWSDLParser::pushCurrentType(const TypeSharedPtr& pCurrentType)
 void QWSDLParser::popCurrentType()
 {
 	logParser(" pop type:" + QString::number(m_stackCurrentTypes.count()));
-	m_stackCurrentTypes.pop();
+	if ( !m_stackCurrentTypes.empty() )
+	{
+		m_stackCurrentTypes.pop();
+	}
 }
 
 const TypeSharedPtr QWSDLParser::getCurrentType() const
