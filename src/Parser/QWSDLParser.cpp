@@ -769,10 +769,8 @@ bool QWSDLParser::readComplexType(QXmlStreamReader& xmlReader, Section::Name iPa
 	{
 		QString szTagName = xmlReader.name().toString();
 		logParser("SJH - processing sub elements: " + szTagName);
-        ComplexTypeSharedPtr pComplexTypeClone = pComplexType->clone();
 		if (xmlReader.name().toString() == TAG_COMPLEX_CONTENT) {
 			bRes = readComplexContent(xmlReader, Section::ComplexType);
-			pComplexType = pComplexTypeClone;
 			logParser("SJH - sub element is complex: " + szTagName);
 		}else if (xmlReader.name().toString() == TAG_SIMPLE_CONTENT) {
 			bRes = readSimpleContent(xmlReader, Section::ComplexType);
