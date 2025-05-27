@@ -1501,6 +1501,11 @@ bool QWSDLParser::readSimpleType(QXmlStreamReader& xmlReader, Section::Name iPar
 		szName = szName = xmlAttrs.value(ATTR_NAME).toString();
 	}
 
+	if ( iParentSection == Section::Element && szName.isEmpty())
+	{
+		szName = m_pCurrentElement->getName();
+	}
+
 	if(!szName.isEmpty()){
 		TypeSharedPtr pFoundType = getTypeByName(szName, m_szCurrentTargetNamespacePrefix);
 		if(!pFoundType.isNull()) {
