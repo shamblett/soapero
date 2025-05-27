@@ -1,5 +1,5 @@
 #!/bin/bash
-SOAPERO_PATH=../../cmake-build-debug/jet1oeil-soapero
+SOAPERO_PATH=../../cmake-build-debug/soapero
 SOAPERO_RES_PATH=../../resources/
 
 SERVICE_NAME=CalculatorService

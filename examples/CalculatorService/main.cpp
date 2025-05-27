@@ -27,11 +27,11 @@ int main(int argc, char** argv)
 
 	qDebug("Compute %d + %d:", iA.getValue(), iB.getValue());
 
-	calculator::TNS::Add request;
+	calculator::TNS::MSG::Add request;
 	request.setIntA(iA);
 	request.setIntB(iB);
 
-	calculator::TNS::AddResponse response;		
+	calculator::TNS::MSG::AddResponse response;
 	service.Add(request, response);
 
 	qDebug("Response: %d", response.getAddResult().getValue());
