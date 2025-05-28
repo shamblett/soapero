@@ -1,7 +1,7 @@
 #include <iostream>
 #include <QCoreApplication>
 
-#include "../OpenLdbWs/openldbws/xs/types/Integer.h"
+#include "openldbws/xs/types/Integer.h"
 #include "openldbws/OpenLDBWS.h"
 
 int main(int argc, char** argv)
