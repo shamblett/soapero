@@ -6,10 +6,10 @@ int main(int argc, char** argv)
 {
 	QCoreApplication app(argc, argv);
 	
-	qDebug("Starting application");
+	printf("Starting application\n");
 
 	if(argc<3){
-		qDebug("Usage: A B");
+		printf("Usage: A B\n");
 		return 0;
 	}
 
@@ -25,7 +25,7 @@ int main(int argc, char** argv)
 	XS::Integer iB;
 	iB.setValue(szArg2.toInt());
 
-	qDebug("Compute %d + %d:", iA.getValue(), iB.getValue());
+	printf("Compute %d + %d: \n", iA.getValue(), iB.getValue());
 
 	calculator::TNS::MSG::Add request;
 	request.setIntA(iA);
@@ -34,10 +34,10 @@ int main(int argc, char** argv)
 	calculator::TNS::MSG::AddResponse response;
 	service.Add(request, response);
 
-	qDebug("Response: %d", response.getAddResult().getValue());
+	printf("Response: %d \n", response.getAddResult().getValue());
 
 
-	qDebug("Exit application");
+	printf("Exit application\n");
 
 
 	return 0;
